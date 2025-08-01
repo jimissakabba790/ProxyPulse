@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "url": "https://github.com/jimissakabba790/ProxyPulse/releases/download/v1.0.0/ProxyPulse-Setup.exe",
+  "sha256": "placeholder-checksum",
+  "releaseNotes": "Initial release of ProxyPulse",
+  "minimumOSVersion": "10.0.17763.0",
+  "requiresRestart": true,
+  "mandatory": false
+}

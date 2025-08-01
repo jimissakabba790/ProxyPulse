@@ -1,0 +1,19 @@
+&lt;Project Sdk="Microsoft.NET.Sdk">
+
+  &lt;PropertyGroup>
+    &lt;OutputType>Exe&lt;/OutputType>
+    &lt;TargetFramework>net7.0&lt;/TargetFramework>
+    &lt;ImplicitUsings>enable&lt;/ImplicitUsings>
+    &lt;Nullable>enable&lt;/Nullable>
+  &lt;/PropertyGroup>
+
+  &lt;ItemGroup>
+    &lt;PackageReference Include="BenchmarkDotNet" Version="0.13.7" />
+  &lt;/ItemGroup>
+
+  &lt;ItemGroup>
+    &lt;ProjectReference Include="..\ProxyPulse.SocksCore\ProxyPulse.SocksCore.csproj" />
+    &lt;ProjectReference Include="..\ProxyPulse.Routing\ProxyPulse.Routing.csproj" />
+  &lt;/ItemGroup>
+
+&lt;/Project>

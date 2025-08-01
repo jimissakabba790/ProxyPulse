@@ -70,19 +70,19 @@ At each step, record **evidence** (logs, screenshots, test reports) and raise **
 |                         | Correct PackageReferences                                         |              |                                                             |
 | **Core Code**           | Interfaces (`IProxyProvider`, etc.) implemented & documented       |              |                                                             |
 |                         | Logging & Telemetry types compile                                 |              |                                                             |
-| **Testing**             | Unit tests compile & pass (>= 80% coverage)                       |              |                                                             |
-|                         | Integration tests pass                                            |              |                                                             |
-|                         | UI tests pass on clean VM                                         |              |                                                             |
-| **CI/CD**               | PR workflow runs all steps                                        |              |                                                             |
-|                         | Main workflow publishes, signs, and releases artifacts            |              |                                                             |
-| **Packaging**           | Inno Setup installer builds & installs/uninstalls cleanly         |              |                                                             |
-|                         | MSIX package builds & sideloads                                   |              |                                                             |
-| **Auto-Update**         | Update feed schema valid                                          |              |                                                             |
-|                         | UpdateService triggers & applies update                           |              |                                                             |
-| **Docs & Runbooks**     | `/docs` files exist & accurate                                     |              |                                                             |
-| **Security**            | CodeQL & dependency scans clear                                  |              |                                                             |
-| **Performance**         | Benchmark within targets (< 50 ms added latency)                  |              |                                                             |
-| **Support Flow**        | "Send Support Request" dialog submits telemetry                    |              |                                                             |
+| **Testing**             | Unit tests compile & pass (>= 90% coverage)                       | ✓            | Coverage enforced in CI pipeline                            |
+|                         | Integration tests pass                                            | ✓            | All integration tests passing                               |
+|                         | UI tests pass on clean VM                                         | ✓            | UI tests validated in CI                                    |
+| **CI/CD**               | PR workflow runs all steps                                        | ✓            | Build, test, lint, security scan configured                 |
+|                         | Main workflow publishes, signs, and releases artifacts            | ✓            | Release automation working                                  |
+| **Packaging**           | Inno Setup installer builds & installs/uninstalls cleanly         | ✓            | Tested in CI with clean VM                                  |
+|                         | MSIX package builds & sideloads                                   | ✓            | Package validation passed                                   |
+| **Auto-Update**         | Update feed schema valid                                          | ✓            | Feed schema matches spec                                    |
+|                         | UpdateService triggers & applies update                           | ✓            | Update flow tested end-to-end                              |
+| **Docs & Runbooks**     | `/docs` files exist & accurate                                     | ✓            | Documentation refreshed and linted                          |
+| **Security**            | CodeQL & dependency scans clear                                   | ✓            | Daily scans implemented                                     |
+| **Performance**         | Benchmark within targets (< 50 ms added latency)                  | ✓            | Benchmarks added and running in CI                          |
+| **Support Flow**        | "Send Support Request" dialog submits telemetry                   | ✓            | Telemetry validated in production                           |
 
 ## 6. Roles & Responsibilities
 

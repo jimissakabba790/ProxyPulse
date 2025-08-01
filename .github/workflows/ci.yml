@@ -1,0 +1,207 @@
+name: ProxyPulse CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - '.gitignore'
+  pull_request:
+    branches: [ '**' ]
+    paths-ignore:
+      - '**/*.md'
+      - '.gitignore'
+  schedule:
+    - cron: '0 0 * * *' # Run nightly at midnight UTC
+
+env:
+  DOTNET_VERSION: '7.0.x'
+  SOLUTION_PATH: 'ProxyPulse.sln'
+  UI_PROJECT_PATH: 'src/ProxyPulse.UI/ProxyPulse.UI.csproj'
+  ARTIFACT_NAME: 'ProxyPulse.exe'
+  AZURE_KEYVAULT_NAME: 'proxypulse-kv'
+  SIGNING_CERT_NAME: 'code-signing-cert'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Install security tools
+      run: |
+        dotnet tool install --global dotnet-retire
+        dotnet tool install --global security-scan
+    
+    - name: Run dependency check
+      run: |
+        dotnet retire
+        dotnet security-scan
+    
+    - name: Upload scan results
+      uses: actions/upload-artifact@v2
+      with:
+        name: security-scan-results
+        path: security-report/
+
+  benchmarks:
+    runs-on: windows-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Run benchmarks
+      run: |
+        dotnet run -c Release -p src/ProxyPulse.Benchmarks/ProxyPulse.Benchmarks.csproj -- --exporters=Markdown
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v2
+      with:
+        name: benchmark-results
+        path: BenchmarkDotNet.Artifacts/results/
+
+  benchmarks:
+    name: Performance Benchmarks
+    runs-on: windows-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build-and-test]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # For baseline comparison
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Run Benchmarks
+      run: |
+        # Run benchmarks and export as markdown
+        dotnet run -c Release -p src/ProxyPulse.Benchmarks/ProxyPulse.Benchmarks.csproj -- --exporters=Markdown --filter "*"
+
+        # Compare with baseline
+        dotnet tool install -g benchmark-validator
+        benchmark-validator compare BenchmarkDotNet.Artifacts/results/Benchmarks-report-full.md baseline-benchmarks.md --threshold 10
+
+    - name: Upload Benchmark Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: BenchmarkDotNet.Artifacts/results/
+
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Required for GitVersion
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.10.2
+      with:
+        versionSpec: '5.x'
+
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.10.2
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: Build
+      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore /p:TreatWarningsAsErrors=true /p:EnforceCodeStyleInBuild=true
+
+    - name: Test with coverage
+      run: |
+        dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Threshold=90
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: coverage-report/
+
+    # Run Markdown linting
+    - name: Lint Markdown files
+      uses: DavidAnson/markdownlint-cli2-action@v11
+      with:
+        globs: |
+          README.md
+          docs/*.md
+
+    # Initialize CodeQL
+    - name: Initialize CodeQL
+      if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'csharp'
+
+    # Perform CodeQL Analysis
+    - name: Perform CodeQL Analysis
+      if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+      uses: github/codeql-action/analyze@v2
+
+    # Only run publish and release steps on push to main
+    - name: Publish
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        dotnet publish ${{ env.UI_PROJECT_PATH }} -c Release -r win-x64 /p:PublishSingleFile=true /p:SelfContained=true /p:Version=${{ steps.gitversion.outputs.semVer }}
+      
+    - name: Azure Key Vault - Get Code Signing Certificate
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Download Certificate
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        az keyvault secret download --vault-name ${{ env.AZURE_KEYVAULT_NAME }} --name ${{ env.SIGNING_CERT_NAME }} --file codesign.pfx
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Sign executable
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f codesign.pfx /p ${{ secrets.CERTIFICATE_PASSWORD }} /tr http://timestamp.digicert.com /td sha256 /fd sha256 src/ProxyPulse.UI/bin/Release/net7.0-windows/win-x64/publish/${{ env.ARTIFACT_NAME }}
+
+    - name: Create Release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.gitversion.outputs.semVer }}
+        release_name: Release v${{ steps.gitversion.outputs.semVer }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: src/ProxyPulse.UI/bin/Release/net7.0-windows/win-x64/publish/${{ env.ARTIFACT_NAME }}
+        asset_name: ${{ env.ARTIFACT_NAME }}
+        asset_content_type: application/octet-stream

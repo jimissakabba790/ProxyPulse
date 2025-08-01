@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI" Version="17.0.0" />
+    <PackageReference Include="ReactiveUI.WPF" Version="17.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProxyPulse.Common\ProxyPulse.Common.csproj" />
+    <ProjectReference Include="..\ProxyPulse.Fetchers\ProxyPulse.Fetchers.csproj" />
+    <ProjectReference Include="..\ProxyPulse.SocksCore\ProxyPulse.SocksCore.csproj" />
+    <ProjectReference Include="..\ProxyPulse.Routing\ProxyPulse.Routing.csproj" />
+  </ItemGroup>
+
+</Project>

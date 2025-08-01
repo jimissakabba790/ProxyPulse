@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4D609124-C606-4246-B3DF-4319FAB0649F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyPulse.Common", "src\ProxyPulse.Common\ProxyPulse.Common.csproj", "{C63EAB08-02BF-412C-B472-CB66BA352616}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyPulse.Fetchers", "src\ProxyPulse.Fetchers\ProxyPulse.Fetchers.csproj", "{E76205A4-0D80-4385-A40F-4B58FD175A61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyPulse.SocksCore", "src\ProxyPulse.SocksCore\ProxyPulse.SocksCore.csproj", "{435ED864-8413-4E00-AFD3-CA8EDE935C47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyPulse.Routing", "src\ProxyPulse.Routing\ProxyPulse.Routing.csproj", "{AF026D97-BBEF-4C80-8E32-78111345F5F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyPulse.UI", "src\ProxyPulse.UI\ProxyPulse.UI.csproj", "{9C2E06F6-73C5-48E1-A12E-C925AC521BBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyPulse.Tests", "src\ProxyPulse.Tests\ProxyPulse.Tests.csproj", "{87EE2BBA-224C-4A1E-A2C7-D406578BBCD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C63EAB08-02BF-412C-B472-CB66BA352616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63EAB08-02BF-412C-B472-CB66BA352616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63EAB08-02BF-412C-B472-CB66BA352616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63EAB08-02BF-412C-B472-CB66BA352616}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E76205A4-0D80-4385-A40F-4B58FD175A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E76205A4-0D80-4385-A40F-4B58FD175A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E76205A4-0D80-4385-A40F-4B58FD175A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E76205A4-0D80-4385-A40F-4B58FD175A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{435ED864-8413-4E00-AFD3-CA8EDE935C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{435ED864-8413-4E00-AFD3-CA8EDE935C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{435ED864-8413-4E00-AFD3-CA8EDE935C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{435ED864-8413-4E00-AFD3-CA8EDE935C47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF026D97-BBEF-4C80-8E32-78111345F5F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF026D97-BBEF-4C80-8E32-78111345F5F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF026D97-BBEF-4C80-8E32-78111345F5F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF026D97-BBEF-4C80-8E32-78111345F5F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C2E06F6-73C5-48E1-A12E-C925AC521BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C2E06F6-73C5-48E1-A12E-C925AC521BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C2E06F6-73C5-48E1-A12E-C925AC521BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C2E06F6-73C5-48E1-A12E-C925AC521BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87EE2BBA-224C-4A1E-A2C7-D406578BBCD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87EE2BBA-224C-4A1E-A2C7-D406578BBCD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87EE2BBA-224C-4A1E-A2C7-D406578BBCD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87EE2BBA-224C-4A1E-A2C7-D406578BBCD8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C63EAB08-02BF-412C-B472-CB66BA352616} = {4D609124-C606-4246-B3DF-4319FAB0649F}
+		{E76205A4-0D80-4385-A40F-4B58FD175A61} = {4D609124-C606-4246-B3DF-4319FAB0649F}
+		{435ED864-8413-4E00-AFD3-CA8EDE935C47} = {4D609124-C606-4246-B3DF-4319FAB0649F}
+		{AF026D97-BBEF-4C80-8E32-78111345F5F4} = {4D609124-C606-4246-B3DF-4319FAB0649F}
+		{9C2E06F6-73C5-48E1-A12E-C925AC521BBA} = {4D609124-C606-4246-B3DF-4319FAB0649F}
+		{87EE2BBA-224C-4A1E-A2C7-D406578BBCD8} = {4D609124-C606-4246-B3DF-4319FAB0649F}
+	EndGlobalSection
+EndGlobal
