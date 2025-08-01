@@ -151,14 +151,14 @@ jobs:
     # Initialize CodeQL
     - name: Initialize CodeQL
       if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: 'csharp'
 
     # Perform CodeQL Analysis
     - name: Perform CodeQL Analysis
       if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
 
     # Only run publish and release steps on push to main
     - name: Publish
