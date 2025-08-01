@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/jimissakabba790/ProxyPulse/workflows/ProxyPulse%20CI%2FCD/badge.svg)](https://github.com/jimissakabba790/ProxyPulse/actions)
 [![CodeQL](https://github.com/jimissakabba790/ProxyPulse/workflows/CodeQL/badge.svg)](https://github.com/jimissakabba790/ProxyPulse/security/code-scanning)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/jimissakabba790/ProxyPulse/releases/tag/v1.0.0)
 
 ProxyPulse is a Windows application that enables per-application SOCKS5 proxy routing with real-time proxy endpoint updates. It provides a seamless way to route specific applications through different proxy servers while maintaining high availability through automatic proxy rotation and health checks.
 
@@ -28,6 +29,14 @@ ProxyPulse is a Windows application that enables per-application SOCKS5 proxy ro
 ## Quick Start
 
 ```bash
+# Download and Install
+
+Download the latest release installer:
+https://github.com/jimissakabba790/ProxyPulse/releases/tag/v1.0.0
+
+Or build from source:
+
+```bash
 # Clone the repository
 git clone https://github.com/jimissakabba790/ProxyPulse.git
 
@@ -40,6 +49,7 @@ dotnet build
 # Run the application
 cd src/ProxyPulse.UI
 dotnet run
+```
 ```
 
 ## Testing & Benchmarks
